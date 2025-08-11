@@ -1,5 +1,8 @@
 # Home Helfy task - Matvey Guralskiy
 
+## Architecture
+<img src="Architecture/Architecture.png">
+
 ## Overview
 This is a complete full-stack application with authentication, database integration, and monitoring capabilities built as part of a professional development test. The application demonstrates a modern microservices architecture with real-time data processing capabilities.
 
