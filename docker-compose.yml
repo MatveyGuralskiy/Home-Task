@@ -1,11 +1,37 @@
-# Helfy task
-# Matvey Guralskiy
-
 version: '3.8'
 
 services:
+  pd:
+    image: pingcap/pd:latest
+    command:
+      - --name=pd
+      - --data-dir=/pd/data
+      - --client-urls=http://0.0.0.0:2379
+      - --advertise-client-urls=http://pd:2379
+      - --peer-urls=http://0.0.0.0:2380
+      - --advertise-peer-urls=http://pd:2380
+    ports:
+      - "2379:2379"
+    volumes:
+      - pd-data:/pd/data
+
+  tikv:
+    image: pingcap/tikv:latest
+    depends_on:
+      - pd
+    command:
+      - --pd=pd:2379
+      - --addr=0.0.0.0:20160
+      - --advertise-addr=tikv:20160
+    volumes:
+      - tikv-data:/tikv/data
+
   tidb:
     image: pingcap/tidb:latest
+    depends_on:
+      - pd
+      - tikv
+    command: ["tidb-server", "--store=tikv", "--path=pd:2379"]
     ports:
       - "4000:4000"
     healthcheck:
@@ -37,6 +63,20 @@ services:
     depends_on:
       - zookeeper
 
+  ticdc:
+    image: pingcap/ticdc:latest
+    depends_on:
+      - pd
+      - kafka
+    ports:
+      - "8300:8300"
+    command:
+      - /cdc
+      - server
+      - --pd=http://pd:2379
+      - --addr=0.0.0.0:8300
+      - --advertise-addr=ticdc:8300
+      - --log-level=info
 
   backend:
     build: ./Backend
@@ -55,8 +95,13 @@ services:
     depends_on:
       - tidb
       - kafka
+      - ticdc
 
   frontend:
     build: ./Frontend
     ports:
       - "8080:80"
+
+volumes:
+  pd-data:
+  tikv-data:

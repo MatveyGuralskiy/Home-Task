@@ -84,6 +84,7 @@ Git/
 ├── start.sh                # Single command startup script
 ├── .env                    # Store secrets
 ├── .gitignore              # To ignore env file
+├── monitor-cdc.sh          # Script for CDC events
 └── README.md               # README
 ```
 
@@ -159,7 +160,7 @@ The application uses environment variables for configuration:
 1. **Start the application**: `./start.sh`
 2. **Wait for all services to be ready** (script will indicate when ready)
 3. **Open browser**: Navigate to http://localhost:8080
-4. **Login**: Use default credentials (admin/admin123)
+4. **Login**: Use default credentials (admin/adminpass)
 5. **Check logs**: Monitor console for real-time activity logging
 
 ## Submission Requirements Met ✅
