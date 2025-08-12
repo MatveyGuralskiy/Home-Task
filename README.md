@@ -49,6 +49,11 @@ This is a complete full-stack application with authentication, database integrat
 ```bash
 ./start.sh
 ```
+#### To make sure TiCDC is running and sending changes to Kafka
+```bash
+# make sure docker compose running and all parts are fine
+./monitor-cdc.sh
+```
 
 This single command will:
 1. Start Zookeeper service
